@@ -12,10 +12,14 @@ CONFIG += c++17
 
 SOURCES += \
     SocketUDP.cpp \
+    communicator.cpp \
+    controller.cpp \
     main.cpp \
     mainwindow.cpp
 
 HEADERS += \
+    communicator.h \
+    controller.h \
     mainwindow.h
 
 FORMS += \

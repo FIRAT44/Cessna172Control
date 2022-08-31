@@ -5,7 +5,7 @@
 #include <QSlider>
 #include <QLabel>
 #include <QUdpSocket>
-#include <QWidget>>
+#include <QWidget>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -29,11 +29,17 @@ public:
 private:
     QUdpSocket *mSocket;
 
+signals:
+    void  yawValueChanged(float pYaw);
+    void  rollValueChanged(float pRoll);
+    void  pitchValueChanged(float pPitch);
+    void  powerValueChanged(float pPower);
+    void  flapValueChanged(float pFlap);
 
 
 private slots:
-    void setHrzSliderValue(int iValue);
-    void flapHrzSliderValue(int iValue);
+    void setHrzSliderValue(float iValue);
+    void flapHrzSliderValue(float iValue);
     void aileronsHrzSliderValue(float iValue);
     void elevatorHrzSliderValue(float iValue);
     void rudderHrzSliderValue(float iValue);

@@ -63,6 +63,11 @@ MainWindow::MainWindow(QWidget *parent)
     connect(mHrzSlider,&QSlider::sliderMoved,this,&MainWindow::setHrzSliderValue);
 
 
+    ///
+    connect(mHrzSlider,&QSlider::sliderMoved,this,&MainWindow::powerValueChanged);
+
+
+
     // flap layout
     QHBoxLayout *flapLayout = new QHBoxLayout;
     flapLayout->addWidget(flapText);
@@ -74,7 +79,7 @@ MainWindow::MainWindow(QWidget *parent)
     flapText->setText("Flap Angle  ");
 
     flapSlider->setMinimum(0);
-    flapSlider->setMaximum(100);
+    flapSlider->setMaximum(300);
     flapSlider->setSingleStep(5);
     flapSlider->setPageStep(20);
     flapSlider->setTracking(false);
@@ -83,9 +88,10 @@ MainWindow::MainWindow(QWidget *parent)
     flapValue->setText(QString::number(flapSlider->value()));
     connect(flapSlider,&QSlider::sliderMoved,this,&MainWindow::flapHrzSliderValue);
 
+    ///
+    connect(flapSlider,&QSlider::sliderMoved,this,&MainWindow::flapValueChanged);
 
-
-
+connect(mHrzSlider,&QSlider::sliderMoved,this,&MainWindow::powerValueChanged);
 
     // Ailerons layout
     QHBoxLayout *aileronsLayout = new QHBoxLayout;
@@ -107,6 +113,9 @@ MainWindow::MainWindow(QWidget *parent)
     aileronsSliderValue->setText(QString::number(aileronsSlider->value()));
     connect(aileronsSlider,&QSlider::sliderMoved,this,&MainWindow::aileronsHrzSliderValue);
 
+    ////
+
+    connect(aileronsSlider,&QSlider::sliderMoved,this,&MainWindow::rollValueChanged);
 
 
     // Elevator layout
@@ -129,7 +138,8 @@ MainWindow::MainWindow(QWidget *parent)
     elevatorSliderValue->setText(QString::number(elevatorSlider->value()));
     connect(elevatorSlider,&QSlider::sliderMoved,this,&MainWindow::elevatorHrzSliderValue);
 
-
+    ///
+    connect(elevatorSlider,&QSlider::sliderMoved,this,&MainWindow::pitchValueChanged);
 
     // Rudder layout
     QHBoxLayout *rudderLayout = new QHBoxLayout;
@@ -150,6 +160,9 @@ MainWindow::MainWindow(QWidget *parent)
     // Rudder
     rudderSliderValue->setText(QString::number(rudderSlider->value()));
     connect(rudderSlider,&QSlider::sliderMoved,this,&MainWindow::rudderHrzSliderValue);
+//
+   connect(rudderSlider,&QSlider::sliderMoved,this,&MainWindow::yawValueChanged);
+
 
 
     // UDP bölümü
@@ -227,19 +240,19 @@ void MainWindow::on_rightBtn_clicked(float iValue)
 
 // fonkisyon bölümü
 
-void MainWindow::setHrzSliderValue(int iValue)
+void MainWindow::setHrzSliderValue(float iValue)
 {
     //std::cout<<iValue<<"\n";
-    float a = iValue*0.69;
+    float a = iValue/100;
     mHrzSliderValue->setText(QString::number(a)+ " hp ");
-    SocketSend(QString::number(a),clientIp,clientPort);
+    SocketSend("Pow"+QString::number(a),clientIp,clientPort);
 }
-void MainWindow::flapHrzSliderValue(int iValue)
+void MainWindow::flapHrzSliderValue(float iValue)
 {
     //std::cout<<iValue<<"\n";
-    float a = iValue/53.7;
-    flapValue->setText(QString::number(a)+" Radian ");
-    SocketSend(QString::number(a),clientIp,clientPort);
+    float a = iValue/1000;
+    flapValue->setText(QString::number(a*100)+" derece ");
+    SocketSend("Ang"+QString::number(a),clientIp,clientPort);
 }
 
 void MainWindow::aileronsHrzSliderValue(float iValue)
@@ -247,7 +260,7 @@ void MainWindow::aileronsHrzSliderValue(float iValue)
     //std::cout<<iValue<<"\n";
     float a = iValue/100;
     aileronsSliderValue->setText(" Aileron value: "+QString::number(a));
-    SocketSend(QString::number(a),clientIp,clientPort);
+    SocketSend("Ail"+QString::number(a),clientIp,clientPort);
 }
 
 void MainWindow::elevatorHrzSliderValue(float iValue)
@@ -255,7 +268,7 @@ void MainWindow::elevatorHrzSliderValue(float iValue)
     //std::cout<<iValue<<"\n";
     float a = iValue/100;
     elevatorSliderValue->setText(" Elevator value: "+QString::number(a));
-    SocketSend(QString::number(a),clientIp,clientPort);
+    SocketSend("ele"+QString::number(a),clientIp,clientPort);
 }
 
 void MainWindow::rudderHrzSliderValue(float iValue)
@@ -263,5 +276,5 @@ void MainWindow::rudderHrzSliderValue(float iValue)
     //std::cout<<iValue<<"\n";
     float a = iValue/100;
     rudderSliderValue->setText(" Rudder value: "+QString::number(a));
-    SocketSend(QString::number(a),clientIp,clientPort);
+    SocketSend("rud"+QString::number(a),clientIp,clientPort);
 }
